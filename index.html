@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreatLoveAudio - Читалка книг с озвучкой</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h2>🎧 GreatLoveAudio</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home">Главная</a></li>
+                <li><a href="#upload">Загрузить книгу</a></li>
+                <li><a href="#reader">Читалка</a></li>
+                <li><a href="#about">О проекте</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Главная секция -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">GreatLoveAudio</h1>
+            <p class="hero-subtitle">Загружайте книги и слушайте их с AI-озвучкой</p>
+            <div class="hero-buttons">
+                <a href="#upload" class="btn btn-primary">Загрузить книгу</a>
+                <a href="#reader" class="btn btn-secondary">Открыть читалку</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="floating-elements">
+                <div class="element">📚</div>
+                <div class="element">🎧</div>
+                <div class="element">🤖</div>
+                <div class="element">✨</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Загрузка книг -->
+    <section id="upload" class="upload-section">
+        <div class="container">
+            <h2 class="section-title">Загрузить книгу</h2>
+            <div class="upload-container">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📚</div>
+                    <h3>Перетащите файл книги сюда</h3>
+                    <p>Или нажмите для выбора файла</p>
+                    <p class="supported-formats">Поддерживаемые форматы: PDF, EPUB, FB2, TXT</p>
+                    <input type="file" id="fileInput" accept=".pdf,.epub,.fb2,.txt" style="display: none;">
+                </div>
+                
+                <div class="upload-progress" id="uploadProgress" style="display: none;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p id="progressText">Обработка файла...</p>
+                </div>
+
+                <div class="upload-result" id="uploadResult" style="display: none;">
+                    <div class="result-icon">✅</div>
+                    <h3 id="resultTitle">Книга успешно загружена!</h3>
+                    <p id="resultInfo">Файл обработан и готов к чтению</p>
+                    <button class="btn btn-primary" onclick="openReader()">Открыть читалку</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Читалка -->
+    <section id="reader" class="reader-section">
+        <div class="container">
+            <h2 class="section-title">Читалка книг</h2>
+            <div class="reader-container" id="readerContainer">
+                <div class="no-book-message" id="noBookMessage">
+                    <div class="message-icon">📖</div>
+                    <h3>Книга не загружена</h3>
+                    <p>Сначала загрузите книгу, чтобы начать чтение</p>
+                    <a href="#upload" class="btn btn-primary">Загрузить книгу</a>
+                </div>
+                
+                <div class="book-reader" id="bookReader" style="display: none;">
+                    <div class="reader-sidebar">
+                        <div class="book-info">
+                            <h3 id="bookTitle">Название книги</h3>
+                            <p id="bookPages">Страниц: 0</p>
+                        </div>
+                        
+                        <!-- Оглавление -->
+                        <div class="table-of-contents">
+                            <h4>Оглавление</h4>
+                            <div class="contents-list" id="contentsList">
+                                <!-- Оглавление будет здесь -->
+                            </div>
+                        </div>
+                        
+                        <div class="voice-settings">
+                            <h4>Настройки озвучки</h4>
+                            <select id="voiceSelect" class="voice-select">
+                                <option value="default">По умолчанию</option>
+                                <option value="female">Женский голос</option>
+                                <option value="male">Мужской голос</option>
+                            </select>
+                            
+                            <div class="speed-control">
+                                <label for="speedSlider">Скорость: <span id="speedValue">1.0</span>x</label>
+                                <input type="range" id="speedSlider" min="0.5" max="2.0" step="0.1" value="1.0">
+                            </div>
+                        </div>
+                        
+                        <div class="audio-controls">
+                            <h4>Управление</h4>
+                            <button class="btn btn-primary" id="playButton" onclick="toggleAudio()">
+                                ▶️ Воспроизвести
+                            </button>
+                            <button class="btn btn-secondary" id="stopButton" onclick="stopAudio()" disabled>
+                                ⏹️ Стоп
+                            </button>
+                            <button class="btn btn-outline" id="pauseButton" onclick="pauseAudio()" disabled>
+                                ⏸️ Пауза
+                            </button>
+                        </div>
+                        
+                        <div class="reading-progress">
+                            <h4>Прогресс чтения</h4>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="readingProgress"></div>
+                            </div>
+                            <p id="currentPage">Страница 1 из 0</p>
+                        </div>
+                    </div>
+                    
+                    <div class="reader-content">
+                        <div class="text-content" id="textContent">
+                            <!-- Текст книги будет здесь -->
+                        </div>
+                        
+                        <div class="page-navigation">
+                            <button class="btn btn-secondary" id="prevPage" onclick="previousPage()" disabled>
+                                ← Предыдущая
+                            </button>
+                            <span id="pageInfo">Страница 1 из 0</span>
+                            <button class="btn btn-secondary" id="nextPage" onclick="nextPage()" disabled>
+                                Следующая →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- О проекте -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2 class="section-title">О проекте</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>GreatLoveAudio</h3>
+                    <p>Инновационная платформа для чтения книг с AI-озвучкой. Загружайте свои книги в различных форматах и наслаждайтесь профессиональным чтением.</p>
+                    
+                    <div class="features">
+                        <div class="feature">
+                            <span class="feature-icon">📚</span>
+                            <h4>Множество форматов</h4>
+                            <p>Поддержка PDF, EPUB, FB2, TXT</p>
+                        </div>
+                        <div class="feature">
+                            <span class="feature-icon">🤖</span>
+                            <h4>AI-озвучка</h4>
+                            <p>Высококачественное чтение текста</p>
+                        </div>
+                        <div class="feature">
+                            <span class="feature-icon">🎧</span>
+                            <h4>Выбор голоса</h4>
+                            <p>Различные варианты озвучки</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 GreatLoveAudio. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
